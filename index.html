@@ -1305,6 +1305,10 @@
                 users = updated;
                 saveUsers();
                 renderUserGrid();
+
+                // Broadcast the changes to other "devices"
+                mockWebSocketClient.send(JSON.stringify(users));
+
                 editBackdrop.classList.remove('show');
             });
 
@@ -1315,11 +1319,93 @@
                 }
             });
 
+            <!--
+                REAL-TIME SYNC EXPLANATION:
+                This application uses two mechanisms for real-time updates:
+
+                1. Cross-Tab Syncing (Functional):
+                   - The `window.addEventListener('storage', ...)` code at the end of the script is a standard browser feature.
+                   - When `localStorage` is changed in one tab, the 'storage' event fires in all other tabs for the same origin.
+                   - This provides a simple and effective way to keep all open tabs on a single device in sync.
+
+                2. Cross-Device Syncing (Demonstration Only):
+                   - To sync data across *different devices*, a backend server with WebSocket support is required.
+                   - The `mockWebSocketServer` and `mockWebSocketClient` objects simulate the client-side *pattern* for this.
+                   - In a real application, the `mockWebSocketClient.send` call would transmit data to a real server,
+                     and the `mockWebSocketClient.onmessage` handler would receive updates from the server.
+                   - This part of the code is a non-functional blueprint for a future backend implementation.
+            -->
+            // --- WebSocket Simulation for real-time updates across devices ---
+            // In a real application, you would use a WebSocket library (like Socket.IO)
+            // and connect to a real backend server (e.g., Node.js, Python).
+            const mockWebSocketServer = {
+                clients: new Set(),
+                register(client) {
+                    this.clients.add(client);
+                    console.log('WebSocket client registered');
+                },
+                unregister(client) {
+                    this.clients.delete(client);
+                    console.log('WebSocket client unregistered');
+                },
+                broadcast(message) {
+                    console.log('Broadcasting message to all clients:', message);
+                    this.clients.forEach(client => {
+                        if (client.onmessage) {
+                            // Simulate receiving a message event
+                            client.onmessage({ data: message });
+                        }
+                    });
+                }
+            };
+
+            // Each browser tab will have its own "client"
+            const mockWebSocketClient = {
+                onmessage: null,
+                connect() {
+                    mockWebSocketServer.register(this);
+                },
+                disconnect() {
+                    mockWebSocketServer.unregister(this);
+                },
+                send(data) {
+                    // In a real scenario, this sends data to the server.
+                    // Here, we just have the server broadcast it immediately.
+                    console.log('Sending message via WebSocket:', data);
+                    mockWebSocketServer.broadcast(data);
+                }
+            };
+            // --- End of WebSocket Simulation ---
+
             // Init
+            mockWebSocketClient.connect();
+
+            // The onmessage handler is removed from the simulation. In a real implementation,
+            // this is where you would handle incoming messages from the server to update the UI.
+            // For local tab-syncing, the 'storage' event listener is sufficient.
+            mockWebSocketClient.onmessage = null;
+
             loadUsers();
             renderUserGrid();
             updateDateTime();
             setInterval(updateDateTime, 1000);
+
+            // Real-time sync between tabs on the same device
+            window.addEventListener('storage', (e) => {
+                if (e.key === STORAGE_KEY) {
+                    console.log('Storage changed, reloading users...');
+                    loadUsers();
+                    renderUserGrid();
+
+                    // If the currently viewed user's links are edited, return to the main menu
+                    if (userLinksView.style.display === 'block' && currentLinksUser) {
+                        const updatedUser = users.find(u => u.id === currentLinksUser.id);
+                        if (!updatedUser || JSON.stringify(updatedUser) !== JSON.stringify(currentLinksUser)) {
+                            backFromLinks.click();
+                        }
+                    }
+                }
+            });
         });
     </script>
 </body>
