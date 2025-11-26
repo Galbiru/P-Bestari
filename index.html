@@ -847,7 +847,6 @@
                           <br>
                         __________   PROJECT QUANTITATIVE   ________ <br>
                           <br>
-                          
                     </div>
                 </div>
 
@@ -941,7 +940,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const DEFAULT_SURVEY_LINK = "https://survey.xmfactory.com/survey?b=1025655&l=52472bf1b710780c";
             const PASSWORD_EDIT = "Aco123";
-            const STORAGE_KEY = "projectBestariUsersV2";
+            const STORAGE_KEY = "projectBestariUsersV3"; // versi baru
 
             const welcomePage = document.getElementById('welcome-page');
             const startBtn = document.getElementById('start-btn');
@@ -966,17 +965,64 @@
             let users = [];
             let currentLinksUser = null;
 
+            // DEFAULT USER: nama + ID interviewer (xx000)
             function createDefaultUsers() {
-                const arr = [];
-                for (let i = 1; i <= 13; i++) {
-                    arr.push({
-                        id: `user-${i}`,
-                        name: `User ${i}`,
-                        mode: 'single',
+                return [
+                    {
+                        id: "41000",
+                        name: "EVIE BUNGAI (41000)",
+                        mode: "single",
                         links: [DEFAULT_SURVEY_LINK]
-                    });
-                }
-                return arr;
+                    },
+                    {
+                        id: "42000",
+                        name: "SRI SUWARTI (42000)",
+                        mode: "single",
+                        links: [DEFAULT_SURVEY_LINK]
+                    },
+                    {
+                        id: "43000",
+                        name: "PASULENY (43000)",
+                        mode: "single",
+                        links: [DEFAULT_SURVEY_LINK]
+                    },
+                    {
+                        id: "44000",
+                        name: "ROSI (44000)",
+                        mode: "single",
+                        links: [DEFAULT_SURVEY_LINK]
+                    },
+                    {
+                        id: "45000",
+                        name: "POPY (45000)",
+                        mode: "single",
+                        links: [DEFAULT_SURVEY_LINK]
+                    },
+                    {
+                        id: "46000",
+                        name: "ARI Y (46000)",
+                        mode: "single",
+                        links: [DEFAULT_SURVEY_LINK]
+                    },
+                    {
+                        id: "47000",
+                        name: "YOHANA AMI (47000)",
+                        mode: "single",
+                        links: [DEFAULT_SURVEY_LINK]
+                    },
+                    {
+                        id: "48000",
+                        name: "SITI UNTARI (48000)",
+                        mode: "single",
+                        links: [DEFAULT_SURVEY_LINK]
+                    },
+                    {
+                        id: "49000",
+                        name: "OLIV (49000)",
+                        mode: "single",
+                        links: [DEFAULT_SURVEY_LINK]
+                    }
+                ];
             }
 
             function normalizeUser(u, index) {
@@ -1161,252 +1207,4 @@
                                 <input
                                     type="text"
                                     class="link-single-input"
-                                    data-id="${user.id}"
-                                    placeholder="https://..."
-                                />
-                            </div>
-                            <div>
-                                <textarea
-                                    class="link-multi-textarea"
-                                    data-id="${user.id}"
-                                    placeholder="Satu link per baris"
-                                ></textarea>
-                                <div class="link-multi-hint">Multi link: isi beberapa URL, tiap baris satu.</div>
-                            </div>
-                        </div>
-                    `;
-
-                    editUsersList.appendChild(row);
-
-                    const modeSelect = row.querySelector('.link-mode-select');
-                    const singleInput = row.querySelector('.link-single-input');
-                    const multiTextarea = row.querySelector('.link-multi-textarea');
-
-                    modeSelect.value = user.mode || 'single';
-                    singleInput.value = singleLink;
-                    multiTextarea.value = linksForMulti;
-
-                    function applyModeUI() {
-                        if (modeSelect.value === 'multi') {
-                            singleInput.style.display = 'none';
-                            multiTextarea.style.display = 'block';
-                        } else {
-                            singleInput.style.display = 'block';
-                            multiTextarea.style.display = 'none';
-                        }
-                    }
-
-                    applyModeUI();
-                    modeSelect.addEventListener('change', applyModeUI);
-                });
-            }
-
-            function openEditPanel() {
-                rebuildEditList();
-                editBackdrop.classList.add('show');
-            }
-
-            // Start button
-            startBtn.addEventListener('click', () => {
-                welcomePage.style.opacity = '0';
-                setTimeout(() => {
-                    welcomePage.style.display = 'none';
-                    mainView.style.display = 'block';
-                    requestAnimationFrame(() => {
-                        mainView.style.opacity = '1';
-                    });
-                }, 350);
-            });
-
-            // Edit button with password
-            editBtn.addEventListener('click', () => {
-                const pwd = prompt('Masukkan password untuk mengelola user:');
-                if (pwd === null) return;
-                if (pwd !== PASSWORD_EDIT) {
-                    alert('Password salah.');
-                    return;
-                }
-                openEditPanel();
-            });
-
-            // Tambah user
-            addUserBtn.addEventListener('click', () => {
-                const newIndex = users.length + 1;
-                const newUser = {
-                    id: `user-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                    name: `User ${newIndex}`,
-                    mode: 'single',
-                    links: [DEFAULT_SURVEY_LINK]
-                };
-                users.push(newUser);
-                rebuildEditList();
-            });
-
-            // Hapus user (delegation)
-            editUsersList.addEventListener('click', (e) => {
-                if (e.target.classList.contains('btn-delete-user')) {
-                    const id = e.target.getAttribute('data-id');
-                    if (users.length <= 1) {
-                        alert('Minimal harus ada 1 user.');
-                        return;
-                    }
-                    users = users.filter(u => u.id !== id);
-                    rebuildEditList();
-                }
-            });
-
-            // Batal edit
-            editCancel.addEventListener('click', () => {
-                editBackdrop.classList.remove('show');
-            });
-
-            // Simpan perubahan
-            editSave.addEventListener('click', () => {
-                const rows = editUsersList.querySelectorAll('.edit-row');
-                const updated = [];
-
-                rows.forEach(row => {
-                    const nameInput = row.querySelector('.name-input');
-                    const id = nameInput.getAttribute('data-id');
-                    let name = nameInput.value.trim();
-                    if (!name) name = 'User';
-
-                    const modeSelect = row.querySelector('.link-mode-select');
-                    const modeValue = modeSelect.value === 'multi' ? 'multi' : 'single';
-
-                    const singleInput = row.querySelector('.link-single-input');
-                    const multiTextarea = row.querySelector('.link-multi-textarea');
-
-                    let links = [];
-                    if (modeValue === 'multi') {
-                        const lines = multiTextarea.value.split('\n')
-                            .map(l => l.trim())
-                            .filter(l => l.length > 0);
-                        if (lines.length === 0) {
-                            links = [DEFAULT_SURVEY_LINK];
-                        } else {
-                            links = lines;
-                        }
-                    } else {
-                        let url = singleInput.value.trim();
-                        if (!url) url = DEFAULT_SURVEY_LINK;
-                        links = [url];
-                    }
-
-                    const existing = users.find(u => u.id === id);
-                    updated.push({
-                        id,
-                        name,
-                        mode: modeValue,
-                        links
-                    });
-                });
-
-                users = updated;
-                saveUsers();
-                renderUserGrid();
-
-                // Broadcast the changes to other "devices"
-                mockWebSocketClient.send(JSON.stringify(users));
-
-                editBackdrop.classList.remove('show');
-            });
-
-            // Close modal if click outside
-            editBackdrop.addEventListener('click', (e) => {
-                if (e.target === editBackdrop) {
-                    editBackdrop.classList.remove('show');
-                }
-            });
-
-            <!--
-                REAL-TIME SYNC EXPLANATION:
-                This application uses two mechanisms for real-time updates:
-
-                1. Cross-Tab Syncing (Functional):
-                   - The `window.addEventListener('storage', ...)` code at the end of the script is a standard browser feature.
-                   - When `localStorage` is changed in one tab, the 'storage' event fires in all other tabs for the same origin.
-                   - This provides a simple and effective way to keep all open tabs on a single device in sync.
-
-                2. Cross-Device Syncing (Demonstration Only):
-                   - To sync data across *different devices*, a backend server with WebSocket support is required.
-                   - The `mockWebSocketServer` and `mockWebSocketClient` objects simulate the client-side *pattern* for this.
-                   - In a real application, the `mockWebSocketClient.send` call would transmit data to a real server,
-                     and the `mockWebSocketClient.onmessage` handler would receive updates from the server.
-                   - This part of the code is a non-functional blueprint for a future backend implementation.
-            -->
-            // --- WebSocket Simulation for real-time updates across devices ---
-            // In a real application, you would use a WebSocket library (like Socket.IO)
-            // and connect to a real backend server (e.g., Node.js, Python).
-            const mockWebSocketServer = {
-                clients: new Set(),
-                register(client) {
-                    this.clients.add(client);
-                    console.log('WebSocket client registered');
-                },
-                unregister(client) {
-                    this.clients.delete(client);
-                    console.log('WebSocket client unregistered');
-                },
-                broadcast(message) {
-                    console.log('Broadcasting message to all clients:', message);
-                    this.clients.forEach(client => {
-                        if (client.onmessage) {
-                            // Simulate receiving a message event
-                            client.onmessage({ data: message });
-                        }
-                    });
-                }
-            };
-
-            // Each browser tab will have its own "client"
-            const mockWebSocketClient = {
-                onmessage: null,
-                connect() {
-                    mockWebSocketServer.register(this);
-                },
-                disconnect() {
-                    mockWebSocketServer.unregister(this);
-                },
-                send(data) {
-                    // In a real scenario, this sends data to the server.
-                    // Here, we just have the server broadcast it immediately.
-                    console.log('Sending message via WebSocket:', data);
-                    mockWebSocketServer.broadcast(data);
-                }
-            };
-            // --- End of WebSocket Simulation ---
-
-            // Init
-            mockWebSocketClient.connect();
-
-            // The onmessage handler is removed from the simulation. In a real implementation,
-            // this is where you would handle incoming messages from the server to update the UI.
-            // For local tab-syncing, the 'storage' event listener is sufficient.
-            mockWebSocketClient.onmessage = null;
-
-            loadUsers();
-            renderUserGrid();
-            updateDateTime();
-            setInterval(updateDateTime, 1000);
-
-            // Real-time sync between tabs on the same device
-            window.addEventListener('storage', (e) => {
-                if (e.key === STORAGE_KEY) {
-                    console.log('Storage changed, reloading users...');
-                    loadUsers();
-                    renderUserGrid();
-
-                    // If the currently viewed user's links are edited, return to the main menu
-                    if (userLinksView.style.display === 'block' && currentLinksUser) {
-                        const updatedUser = users.find(u => u.id === currentLinksUser.id);
-                        if (!updatedUser || JSON.stringify(updatedUser) !== JSON.stringify(currentLinksUser)) {
-                            backFromLinks.click();
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+                                    data-id="${user.i
