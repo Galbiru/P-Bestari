@@ -1,278 +1,527 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Bestari - Survey Panel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="theme-color" content="#1e40af">
+    <title>Byantara Project - Survey Panel</title>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
         :root {
-            --blue-main: #2563eb;
-            --blue-soft: #60a5fa;
-            --blue-deep: #1d4ed8;
-            --bg-dark: #020617;
-            --white-soft: #f9fafb;
-            --muted: #94a3b8;
+            --primary: #1e40af;
+            --primary-light: #eff6ff;
+            --primary-hover: #1d4ed8;
+            --text: #172554;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --background: #f8fafc;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(145deg, #020617, #0f172a);
-            color: var(--white-soft);
-            margin: 0;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 30px 16px;
+        }
+
+        button {
+            font-family: inherit;
         }
 
         .app-shell {
-            max-width: 480px;
+            width: 100%;
+            max-width: 620px;
             margin: auto;
-            background: #020617;
-            border-radius: 24px;
-            border: 1px solid rgba(148,163,184,0.3);
-            padding: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
         }
 
-        .fade-transition { transition: opacity .35s ease; }
+        /* HEADER */
 
-        #edit-users-btn {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            padding: 6px 14px;
-            font-size: 0.75rem;
-            background: #1d4ed8;
-            border-radius: 30px;
-            border: 1px solid #60a5fa;
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 58px;
+            height: 58px;
+            background: var(--primary);
             color: white;
-            cursor: pointer;
-            z-index: 99;
-        }
-
-        .users-grid { display: grid; gap: 12px; }
-
-        .user-card {
-            background: #0f172a;
-            border: 1px solid #1d4ed8;
-            padding: 12px;
-            border-radius: 14px;
-            display: flex;
-            gap: 12px;
-            cursor: pointer;
-            transition: 0.15s;
-        }
-        .user-card:hover { transform: scale(1.02); border-color: #60a5fa; }
-
-        .avatar-circle {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #2563eb;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 20px rgba(30,64,175,.2);
+        }
+
+        .header h1 {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        .header-label {
+            display: inline-block;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        /* MAIN CARD */
+
+        .main-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 26px;
+            box-shadow: 0 10px 35px rgba(15,23,42,.04);
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .section-description {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 22px;
+            line-height: 1.6;
+        }
+
+        /* CITY BUTTONS */
+
+        .city-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .city-card {
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 16px;
+            padding: 22px 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: .2s ease;
+        }
+
+        .city-card:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(30,64,175,.08);
+        }
+
+        .city-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            border-radius: 14px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+        }
+
+        .city-card h3 {
+            font-size: 15px;
             font-weight: 700;
         }
 
-        .edit-panel-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.75);
+        .city-card p {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        /* INTERVIEWER LIST */
+
+        .page {
             display: none;
+            animation: fadeIn .3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-btn {
+            border: none;
+            background: transparent;
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 20px;
+            padding: 5px 0;
+        }
+
+        .back-btn:hover {
+            color: var(--primary-hover);
+        }
+
+        .city-heading {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .city-heading h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .total-badge {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 8px 12px;
+            border-radius: 30px;
+            white-space: nowrap;
+        }
+
+        .interviewer-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .interviewer-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            text-align: left;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .interviewer-item:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateX(3px);
+        }
+
+        .number {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            display: flex;
             justify-content: center;
-            z-index: 999;
-        }
-        .edit-panel-backdrop.show { display: flex; }
-
-        .edit-panel {
-            background: #020617;
-            border: 1px solid #2563eb;
-            padding: 16px;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 450px;
-            max-height: 85vh;
-            overflow-y: auto;
+            align-items: center;
+            border-radius: 11px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
         }
 
-        .edit-row { border-bottom: 1px dashed #334155; padding: 8px 0; }
+        .interviewer-name {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .arrow {
+            color: var(--primary);
+            font-size: 19px;
+            font-weight: 600;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #94a3b8;
+            font-size: 10px;
+            line-height: 1.8;
+        }
+
+        .footer strong {
+            color: var(--muted);
+        }
+
+        @media (max-width: 420px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            .main-card {
+                padding: 20px 16px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .city-grid {
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-<button id="edit-users-btn">✎ Edit User</button>
-
 <div class="app-shell">
 
-    <!-- WELCOME PAGE -->
-    <div id="welcome-page" class="fade-transition" style="opacity:1;">
-        <h1 class="text-2xl font-bold mb-2">Project Bestari<br>Survey Panel</h1>
-        <p class="text-sm text-gray-400 mb-6">
-            Pusat akses survey terstruktur untuk setiap enumerator, terintegrasi dan mudah dipantau.
-        </p>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">B</div>
+        <span class="header-label">SURVEY MANAGEMENT SYSTEM</span>
+        <h1>Byantara Project</h1>
+        <p>Survey Panel & Interviewer Access</p>
+    </header>
 
-        <button id="start-btn" class="px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700">
-            ENTER DASHBOARD
-        </button>
-    </div>
+    <!-- PAGE 1: CITY SELECTION -->
+    <main class="main-card">
 
-    <!-- MAIN PAGE -->
-    <div id="main-view" class="fade-transition" style="display:none; opacity:0;">
-        <h2 class="text-xl font-bold mb-1">Project Bestari Survey Hub</h2>
-        <p class="text-sm text-gray-400 mb-4">Pilih sesuai nama Anda.</p>
+        <section id="home-page" class="page active">
 
-        <div id="datetime-text" class="text-xs mb-4 text-blue-300"></div>
+            <h2 class="section-title">Welcome to Survey Hub</h2>
+            <p class="section-description">
+                Silakan pilih kota sesuai lokasi penugasan
+                Anda untuk mengakses survey.
+            </p>
 
-        <div id="users-grid" class="users-grid"></div>
-        <p class="text-center text-xs mt-4 text-gray-500">
-            Pengelolaan user dilindungi password.
-        </p>
-    </div>
+            <div class="city-grid">
 
-    <!-- LINKS VIEW -->
-    <div id="user-links-view" class="fade-transition" style="display:none; opacity:0;">
-        <button id="back-from-links" class="mb-4 text-blue-300">← Kembali</button>
-        <h3 id="links-user-name" class="font-semibold mb-2"></h3>
-        <div id="links-buttons-container" class="links-buttons"></div>
-    </div>
+                <button class="city-card" onclick="showCity('Jakarta')">
+                    <div class="city-icon">🏙️</div>
+                    <h3>Jakarta</h3>
+                    <p>15 Interviewers</p>
+                </button>
 
-</div>
+                <button class="city-card" onclick="showCity('Surabaya')">
+                    <div class="city-icon">🌆</div>
+                    <h3>Surabaya</h3>
+                    <p>16 Interviewers</p>
+                </button>
 
-<!-- EDIT PANEL -->
-<div id="edit-panel-backdrop" class="edit-panel-backdrop">
-    <div class="edit-panel">
-        <h3 class="font-bold mb-2">Kelola User</h3>
-        <div id="edit-users-list"></div>
-        <button id="edit-cancel" class="mt-3 px-4 py-2 bg-gray-600 rounded">Batal</button>
-        <button id="edit-save" class="mt-3 px-4 py-2 bg-blue-600 rounded">Simpan</button>
-    </div>
+            </div>
+
+        </section>
+
+        <!-- PAGE 2: INTERVIEWER LIST -->
+        <section id="interviewer-page" class="page">
+
+            <button class="back-btn" onclick="showHome()">
+                ← Kembali ke Pilihan Kota
+            </button>
+
+            <div class="city-heading">
+                <div>
+                    <h2 id="city-title">Jakarta</h2>
+                    <p class="section-description" style="margin:5px 0 0">
+                        Pilih nama Anda untuk membuka survey.
+                    </p>
+                </div>
+
+                <span id="total-interviewers" class="total-badge">
+                    15 Orang
+                </span>
+            </div>
+
+            <div id="interviewer-list" class="interviewer-list"></div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <strong>BYANTARA PROJECT</strong>
+        Survey Panel Access System<br>
+        © 2026 All Rights Reserved
+    </footer>
+
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
 
-    const DEFAULT_SURVEY_LINK =
-        "https://survey.xmfactory.com/survey?b=1025655&l=52472bf1b710780c";
+    /* ==============================
+       SURVEY LINK
+    ============================== */
 
-    const PASSWORD_EDIT = "Aco123";
-    const STORAGE_KEY = "projectBestariUsersV2";
+    const SURVEY_LINK =
+        "https://survey.xmfactory.com/survey?b=1029225&l=011615db8952a4a9";
 
-    const welcomePage = document.getElementById("welcome-page");
-    const startBtn = document.getElementById("start-btn");
-    const mainView = document.getElementById("main-view");
-    const usersGrid = document.getElementById("users-grid");
-    const datetimeText = document.getElementById("datetime-text");
 
-    const userLinksView = document.getElementById("user-links-view");
-    const backFromLinks = document.getElementById("back-from-links");
-    const linksUserName = document.getElementById("links-user-name");
-    const linksButtonsContainer = document.getElementById("links-buttons-container");
+    /* ==============================
+       INTERVIEWER DATA
+    ============================== */
 
-    const editBtn = document.getElementById("edit-users-btn");
-    const editBackdrop = document.getElementById("edit-panel-backdrop");
-    const editUsersList = document.getElementById("edit-users-list");
-    const editCancel = document.getElementById("edit-cancel");
-    const editSave = document.getElementById("edit-save");
+    const interviewers = {
 
-    let users = [];
+        Jakarta: [
+            "Evie Bungai",
+            "Sri Suwarti",
+            "Ari Y",
+            "Yohana Ami",
+            "Mawar",
+            "Rondang",
+            "Sulastri",
+            "Neneng N",
+            "Puji",
+            "Ninik Sri K",
+            "Lis Mulyani",
+            "Pasuleny",
+            "Rachmawati",
+            "Audry",
+            "Siwi"
+        ],
 
-    /* ------------------ DEFAULT USER LIST ------------------ */
-    function createDefaultUsers() {
-        return [
-            { id: "41000", name: "EVIE BUNGAI (41000)", mode: "single", links: [DEFAULT_SURVEY_LINK] },
-            { id: "42000", name: "SRI SUWARTI (42000)", mode: "single", links: [DEFAULT_SURVEY_LINK] },
-            { id: "43000", name: "PASULENY (43000)", mode: "single", links: [DEFAULT_SURVEY_LINK] },
-            { id: "44000", name: "ROSI (44000)", mode: "single", links: [DEFAULT_SURVEY_LINK] },
-            { id: "45000", name: "POPY (45000)", mode: "single", links: [DEFAULT_SURVEY_LINK] },
-            { id: "46000", name: "ARI Y (46000)", mode: "single", links: [DEFAULT_SURVEY_LINK] },
-            { id: "47000", name: "YOHANA AMI (47000)", mode: "single", links: [DEFAULT_SURVEY_LINK] },
-            { id: "48000", name: "SITI UNTARI (48000)", mode: "single", links: [DEFAULT_SURVEY_LINK] },
-            { id: "49000", name: "OLIV (49000)", mode: "single", links: [DEFAULT_SURVEY_LINK] }
-        ];
-    }
+        Surabaya: [
+            "Syafri",
+            "Suta",
+            "Very",
+            "Desta",
+            "Lita",
+            "Tatik",
+            "Janny",
+            "Cessy",
+            "Wiji Utami",
+            "Sri Winarni",
+            "Haris Wintoro",
+            "Susilowati",
+            "Lala",
+            "Ristanty",
+            "Sri Aning",
+            "Eko"
+        ]
 
-    /* ------------------ LOAD USERS ------------------ */
-    function loadUsers() {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-            users = createDefaultUsers();
-            saveUsers();
-        } else {
-            users = JSON.parse(raw);
-        }
-    }
+    };
 
-    function saveUsers() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
-    }
 
-    /* ------------------ RENDER LIST ------------------ */
-    function renderUserGrid() {
-        usersGrid.innerHTML = "";
-        users.forEach((u, i) => {
-            const card = document.createElement("div");
-            card.className = "user-card";
-            card.innerHTML = `
-                <div class="avatar-circle">${i + 1}</div>
-                <div>
-                    <div class="font-semibold">${u.name}</div>
-                    <div class="text-xs text-gray-400">ID: ${u.id}</div>
-                </div>
-            `;
-            card.addEventListener("click", () => window.open(u.links[0], "_blank"));
-            usersGrid.appendChild(card);
+    /* ==============================
+       NAVIGATION
+    ============================== */
+
+    function showCity(city) {
+
+        const homePage = document.getElementById("home-page");
+        const interviewerPage =
+            document.getElementById("interviewer-page");
+
+        const cityTitle = document.getElementById("city-title");
+        const total = document.getElementById("total-interviewers");
+        const list = document.getElementById("interviewer-list");
+
+        const names = interviewers[city];
+
+        if (!names) return;
+
+        cityTitle.textContent = city;
+        total.textContent = names.length + " Orang";
+
+        list.innerHTML = "";
+
+        names.forEach((name, index) => {
+
+            const button = document.createElement("button");
+            button.className = "interviewer-item";
+
+            const number = document.createElement("span");
+            number.className = "number";
+            number.textContent = String(index + 1).padStart(2, "0");
+
+            const interviewerName = document.createElement("span");
+            interviewerName.className = "interviewer-name";
+            interviewerName.textContent = name;
+
+            const arrow = document.createElement("span");
+            arrow.className = "arrow";
+            arrow.textContent = "›";
+
+            button.append(number, interviewerName, arrow);
+
+            button.addEventListener("click", () => {
+                window.open(SURVEY_LINK, "_blank", "noopener,noreferrer");
+            });
+
+            list.appendChild(button);
+
         });
-    }
 
-    /* ---------------- TIME ---------------- */
-    function updateTime() {
-        datetimeText.textContent = new Date().toLocaleString("id-ID", {
-            weekday: "long", year: "numeric", month: "long", day: "numeric",
-            hour: "2-digit", minute: "2-digit", second: "2-digit"
+        homePage.classList.remove("active");
+        interviewerPage.classList.add("active");
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
         });
+
     }
 
-    /* ---------------- EDIT PANEL ---------------- */
-    editBtn.addEventListener("click", () => {
-        const pwd = prompt("Masukkan password:");
-        if (pwd !== PASSWORD_EDIT) return alert("Password salah!");
 
-        editBackdrop.classList.add("show");
-        editUsersList.innerHTML = users
-            .map(u => `<div class="edit-row">${u.name}</div>`)
-            .join("");
-    });
+    /* ==============================
+       BACK TO HOME
+    ============================== */
 
-    editCancel.addEventListener("click", () => editBackdrop.classList.remove("show"));
-    editSave.addEventListener("click", () => {
-        editBackdrop.classList.remove("show");
-        saveUsers();
-        renderUserGrid();
-    });
+    function showHome() {
 
-    /* ---------------- WELCOME → MAIN ---------------- */
-    startBtn.addEventListener("click", () => {
-        welcomePage.style.opacity = 0;
-        setTimeout(() => {
-            welcomePage.style.display = "none";
-            mainView.style.display = "block";
-            mainView.style.opacity = 1;
-        }, 300);
-    });
+        document.getElementById("interviewer-page")
+            .classList.remove("active");
 
-    /* ---------------- INIT ---------------- */
-    loadUsers();
-    renderUserGrid();
-    updateTime();
-    setInterval(updateTime, 1000);
+        document.getElementById("home-page")
+            .classList.add("active");
 
-});
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
 </script>
 
 </body>
